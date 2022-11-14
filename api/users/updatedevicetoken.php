@@ -1,3 +1,4 @@
+
 <?php
 include('../include/connection.php');
 header('Access-Control-Allow-Origin:*');
@@ -6,24 +7,33 @@ $EncodeData = file_get_contents('php://input');
 $DecodeData = json_decode($EncodeData, true);
 
 $id = $DecodeData['id'];
-$password = $DecodeData['password'];
+$device_token = rand(2000, 9999);
 
-$newpassword = md5($password);
-$sql = "UPDATE users SET password='$newpassword' WHERE id='$id'";
+$sql = "UPDATE users SET device_token='$device_token' WHERE id=$id";
 
 $run = mysqli_query($conn, $sql);
 if ($run) {
     $response[] = array(
-        "message" => 'Password Updated successfully',
-        "error" => 'false',
+        "message" => 'Device token updated successfully',
+
+
+        "error" => false
 
 
     );
     echo json_encode($response);
 } else {
     $response[] = array(
-        "message" => 'not updated',
-        "error" => 'true',
+        "message" => 'Not Updated',
+        "error" => true
     );
     echo json_encode($response);
 }
+
+
+
+
+
+
+
+?>

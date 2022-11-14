@@ -9,32 +9,31 @@ include('../include/connection.php');
 $EncodeData = file_get_contents('php://input');
 $Data = json_decode($EncodeData, true);
 
-print_r($EncodeData);
-// print_r($Data);
 
-die();
+
 $email = $Data['email'];
 $password = $Data['password'];
-$sql = "SELECT * FROM users where email=$email AND password=$password";
+$pass = md5($password);
+$sql = "SELECT * FROM users ";
 $run = mysqli_query($conn, $sql);
-if ($run) {
-    while ($row = mysqli_fetch_assoc($run)) {
+
+while ($row = mysqli_fetch_assoc($run)) {
+    if ($row['email'] == $email && $row['password'] == $pass) {
         $response[] = array(
             "id" => $row['id'],
             "email" => $row['email'],
-            "password" => $row['password'],
+
             "error" => "false",
             "status" => "You are Successuly Logged In",
         );
+    } else {
+        $response[] = array(
+            "error" => "true",
+            "message" => "Invalid Credientals",
+        );
     }
-} else {
-
-    $response[] = array(
-
-        "error" => "true",
-        "status" => "Invalid Credientals",
-    );
 }
+
 
 echo json_encode($response);
 

@@ -1,22 +1,14 @@
-
 <?php
-
+include('../include/connection.php');
 // Headers
-header('Content-Type: application/json');
-header('Access-Control-Allow-Origin:*');
-header('Access-Control-Allow-Methods:POST');
-header('Access-Control-Allow-Headers:Access-Control-Allow-Headers,Content-Type,Access-Control-Allow-Methods,Authorization,X-Requested-With');
 $Data = json_decode(file_get_contents("php://input"), true);
-
 $EncodeData = file_get_contents('php://input');
 $DecodeData = json_decode($EncodeData, true);
-
 $email = $DecodeData['email'];
 $password = $DecodeData['password'];
 $first_name = $DecodeData['first_name'];
 $last_name = $DecodeData['last_name'];
 $created_date = date('dd-mm-YYYY');
-
 $sql_checkemail = "SELECT * FROM users";
 $run_checkemail = mysqli_query($conn, $sql_checkemail);
 $checkemail_result = 0;
@@ -28,7 +20,7 @@ while ($row_checkemail = mysqli_fetch_assoc($run_checkemail)) {
 }
 
 if ($checkemail_result == 1) {
-    $message = 'Email Already Exsist';
+    $message = 'Email Already Exist';
     $response[] = array(
         "message" => $message,
         "error" => true,
@@ -36,7 +28,7 @@ if ($checkemail_result == 1) {
     );
     echo json_encode($response);
 } else {
-    $sql = "INSERT INTO users(email,password,first_name,last_name,created_date) 
+    $sql = "INSERT INTO users(email,password,first_name,last_name,created_at) 
 	VALUES ('$email','$password','$first_name','$last_name','$created_date')";
     $run = mysqli_query($conn, $sql);
 
@@ -70,8 +62,3 @@ if ($checkemail_result == 1) {
     );
     echo json_encode($response);
 }
-
-
-
-
-?>
