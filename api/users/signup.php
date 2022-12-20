@@ -8,7 +8,9 @@ $email = $DecodeData['email'];
 $password = $DecodeData['password'];
 $first_name = $DecodeData['first_name'];
 $last_name = $DecodeData['last_name'];
-$created_date = date('dd-mm-YYYY');
+$phoneno = $DecodeData['phoneno'];
+$created_date = date('d-m-Y');
+$devicetoken = rand(1000, 9000);
 $sql_checkemail = "SELECT * FROM users";
 $run_checkemail = mysqli_query($conn, $sql_checkemail);
 $checkemail_result = 0;
@@ -28,8 +30,9 @@ if ($checkemail_result == 1) {
     );
     echo json_encode($response);
 } else {
-    $sql = "INSERT INTO users(email,password,first_name,last_name,created_at) 
-	VALUES ('$email','$password','$first_name','$last_name','$created_date')";
+    $password = md5($password);
+    $sql = "INSERT INTO users(email,password,phoneno,first_name,last_name,status,device_token,created_at) 
+	VALUES ('$email','$password','$phoneno','$first_name','$last_name','active','$devicetoken','$created_date')";
     $run = mysqli_query($conn, $sql);
 
     if ($run) {
@@ -58,6 +61,7 @@ if ($checkemail_result == 1) {
         "id" => $id_result,
         "first_name" => $first_name,
         "last_name" => $last_name,
+        "devicetoken" => $devicetoken,
         "error" => false,
     );
     echo json_encode($response);

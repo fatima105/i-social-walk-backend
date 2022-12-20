@@ -9,17 +9,17 @@ $phoneno = $DecodeData['phoneno'];
 $first_name = $DecodeData['first_name'];
 $last_name = $DecodeData['last_name'];
 $id = $DecodeData['id'];
-
-
-
-
 $sql = "UPDATE users SET phoneno='$phoneno' ,first_name='$first_name',last_name='$last_name' WHERE id='$id'";
 
 $run = mysqli_query($conn, $sql);
 if ($run) {
     $response[] = array(
+        "first_name" => $first_name,
+        "last_name" => $last_name,
+        "phoneno" => $phoneno,
+        "id" => $id,
         "message" => 'Profile Updated successfully',
-
+        //
 
         "error" => false
 

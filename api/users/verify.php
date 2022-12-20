@@ -1,6 +1,4 @@
-
 <?php
-
 include('../include/connection.php');
 $EncodeData = file_get_contents('php://input');
 $DecodeData = json_decode($EncodeData, true);
@@ -23,19 +21,24 @@ while ($row = mysqli_fetch_assoc($run)) {
 }
 
 if ($login == 1) {
+    $sqll = "UPDATE users SET otp_code='$code' where email = '$email'";
+    $queryl = mysqli_query($conn, $sqll);
+
     $to = $email;
     $subject = "Verifcation Code for i Social Walk User";
     $txt = "Your 4 Digit Code is " . $code;
-    $headers = "From:mu63668@gmail.com" . "\r\n" .
-        "CC:mu63668@gmail.com";
+    $headers = "From:fatimagull863@gmail.com" . "\r\n" .
+        "CC:fatimagull863@gmail.com";
 
 
 
     if (mail($to, $subject, $txt, $headers)) {
+
         $response[] = array(
             "code" => $code,
             "sentto" => $email,
             "error" => false,
+            "message" => 'successfully sent',
 
         );
         echo json_encode($response);
@@ -50,10 +53,8 @@ if ($login == 1) {
     }
 } else {
     $response[] = array(
-        "message" => 'Email not Exsist',
+        "message" => 'Email not Exist',
         "error" => true
     );
     echo json_encode($response);
 }
-
-?>

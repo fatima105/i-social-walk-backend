@@ -1,4 +1,3 @@
-
 <?php
 include('../include/connection.php');
 header('Access-Control-Allow-Origin:*');
@@ -6,18 +5,17 @@ header('Access-Control-Allow-Methods:POST');
 $EncodeData = file_get_contents('php://input');
 $DecodeData = json_decode($EncodeData, true);
 
-$id = $DecodeData['id'];
-$device_token = rand(2000, 9999);
+$active_watch = $DecodeData['active_watch'];
 
-$sql = "UPDATE users SET device_token='$device_token' WHERE id=$id";
+$id = $DecodeData['id'];
+$sql = "UPDATE users SET active_watch='$active_watch '  WHERE id='$id'";
 
 $run = mysqli_query($conn, $sql);
+
 if ($run) {
     $response[] = array(
-        "message" => 'Device token updated successfully',
-        "token" => $device_token,
-        "id" => $id,
-
+        "active_watch" => $active_watch,
+        "message" => 'Watch Updated successfully',
         "error" => false
 
 
@@ -30,11 +28,3 @@ if ($run) {
     );
     echo json_encode($response);
 }
-
-
-
-
-
-
-
-?>
