@@ -17,6 +17,7 @@ if (mysqli_num_rows($result) > 0) {
         $lastname = $row['last_name'];
         $email = $row['email'];
         $active_watch = $row['active_watch'];
+        $phoneno = $row['phoneno'];
         $profile_image = $row['profile_image'];
     }
     $response[] = array(
@@ -25,6 +26,7 @@ if (mysqli_num_rows($result) > 0) {
         "password" => $password,
         "profile image" => $profile_image,
         "first_name" => $firstname,
+        "phoneno" => $phoneno,
         "last_name" => $lastname,
         "active_watch" => $active_watch,
         "error" => false,
