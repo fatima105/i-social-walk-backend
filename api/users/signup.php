@@ -1,22 +1,16 @@
-
 <?php
-
+include('../include/connection.php');
 // Headers
-header('Content-Type: application/json');
-header('Access-Control-Allow-Origin:*');
-header('Access-Control-Allow-Methods:POST');
-header('Access-Control-Allow-Headers:Access-Control-Allow-Headers,Content-Type,Access-Control-Allow-Methods,Authorization,X-Requested-With');
 $Data = json_decode(file_get_contents("php://input"), true);
-
 $EncodeData = file_get_contents('php://input');
 $DecodeData = json_decode($EncodeData, true);
-
 $email = $DecodeData['email'];
 $password = $DecodeData['password'];
 $first_name = $DecodeData['first_name'];
 $last_name = $DecodeData['last_name'];
-$created_date = date('dd-mm-YYYY');
-
+$phoneno = $DecodeData['phoneno'];
+$created_date = date('d-m-Y');
+$devicetoken = rand(1000, 9000);
 $sql_checkemail = "SELECT * FROM users";
 $run_checkemail = mysqli_query($conn, $sql_checkemail);
 $checkemail_result = 0;
@@ -28,7 +22,7 @@ while ($row_checkemail = mysqli_fetch_assoc($run_checkemail)) {
 }
 
 if ($checkemail_result == 1) {
-    $message = 'Email Already Exsist';
+    $message = 'Email Already Exist';
     $response[] = array(
         "message" => $message,
         "error" => true,
@@ -36,8 +30,9 @@ if ($checkemail_result == 1) {
     );
     echo json_encode($response);
 } else {
-    $sql = "INSERT INTO users(email,password,first_name,last_name,created_date) 
-	VALUES ('$email','$password','$first_name','$last_name','$created_date')";
+    $password = md5($password);
+    $sql = "INSERT INTO users(email,password,phoneno,first_name,last_name,status,device_token,created_at) 
+	VALUES ('$email','$password','$phoneno','$first_name','$last_name','active','$devicetoken','$created_date')";
     $run = mysqli_query($conn, $sql);
 
     if ($run) {
@@ -66,12 +61,8 @@ if ($checkemail_result == 1) {
         "id" => $id_result,
         "first_name" => $first_name,
         "last_name" => $last_name,
+        "devicetoken" => $devicetoken,
         "error" => false,
     );
     echo json_encode($response);
 }
-
-
-
-
-?>
