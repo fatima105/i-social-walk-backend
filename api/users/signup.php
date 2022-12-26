@@ -1,6 +1,7 @@
 <?php
 include('../include/connection.php');
 // Headers
+
 $Data = json_decode(file_get_contents("php://input"), true);
 $EncodeData = file_get_contents('php://input');
 $DecodeData = json_decode($EncodeData, true);
@@ -20,7 +21,7 @@ while ($row_checkemail = mysqli_fetch_assoc($run_checkemail)) {
         break;
     }
 }
-
+$GoalMessage = "";
 if ($checkemail_result == 1) {
     $message = 'Email Already Exist';
     $response[] = array(
@@ -36,12 +37,20 @@ if ($checkemail_result == 1) {
     $run = mysqli_query($conn, $sql);
 
     if ($run) {
+        $uniqid = uniqid();
+        $created_date = date('Y-m-d');
         $sql_id = "SELECT * FROM users";
         $run_id = mysqli_query($conn, $sql_id);
         $id_result = 0;
         while ($row_id = mysqli_fetch_assoc($run_id)) {
             if ($row_id['email'] == $email) {
                 $id_result = $row_id['id'];
+                $quergoals = "INSERT INTO goals(user_id,daily_goal_steps,weekly_goal_steps,date,week_uniq_id)VALUES('$id_result','1200','1200','$created_date','$uniqid')";
+                $run_id = mysqli_query($conn, $quergoals);
+                if ($run_id) {
+
+                    $GoalMessage = "Your Goals are Updated,You can Update";
+                }
                 break;
             } else {
                 continue;
@@ -55,6 +64,7 @@ if ($checkemail_result == 1) {
     $_SESSION["id"] = $id_result;
 
     $response[] = array(
+        "GoalMessage" => $GoalMessage,
         "message" => 'Signup Successful',
         "email" => $email,
         "password" => $password,
