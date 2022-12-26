@@ -10,6 +10,6 @@ function getname($user_id)
             $name = $row['first_name'] . '  ' . $row['last_name'];
             $image = $row['profile_image'];
         }
-        return $name . '' . $image;
+        return $name;
     }
 }

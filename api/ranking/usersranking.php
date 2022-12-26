@@ -48,10 +48,16 @@ if (mysqli_num_rows($run)) {
                 "Time Taken" =>    $time_taken,
                 "error" => false,
             );
+            break;
+        } else {
+            $response[] = array(
+
+                "message" => 'no ranking for today',
+
+                "error" => true,
+            );
         }
     }
 }
-
-
 
 echo json_encode($response);
