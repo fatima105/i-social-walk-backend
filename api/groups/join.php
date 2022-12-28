@@ -21,6 +21,7 @@ if ($rowcount > 0) {
         $image = $row['image'];
     }
     if ($group_privacy == "private") {
+
         $noti_type = "user to group";
         $uniqid = uniqid();
         $date = date('d-m-y h:i:s');
@@ -85,11 +86,18 @@ if ($rowcount > 0) {
         $sql1 = "Insert into notification(noti_type,uniqid,from_id,to_id,date,status) Values ('$noti_type','$uniqid','$user_id','$created_by_user_id','$date','unread')";
         $result = mysqli_query($conn, $sql1);
         if ($result) {
+            $sql1 = "SELECT * from notification where uniqid='$uniqid'";
+            $result2 = mysqli_query($conn, $sql1);
+            if ($result2) {
+                while ($row = mysqli_fetch_assoc($result2)) {
+                    $notificationid = $row['id'];
+                }
+            }
             $response[] = array(
                 'message' => $name . 'joined your group',
                 'error' => 'false',
                 'userid' => $user_id,
-                'Notification id' => $id,
+                'Notification id' => '$notificationid',
                 'User Name' => $name,
                 'created_at' => $created_at,
                 'created_by_user_id' => $created_by_user_id,
