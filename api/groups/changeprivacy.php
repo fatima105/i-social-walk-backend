@@ -19,7 +19,7 @@ if ($group_query) {
         $image = $row['image'];
     }
 }
-echo $sql = "UPDATE groups SET group_privacy='$group_privacy' WHERE id='$id'";
+$sql = "UPDATE groups SET group_privacy='$group_privacy' WHERE id='$id'";
 
 $run = mysqli_query($conn, $sql);
 if ($run) {
