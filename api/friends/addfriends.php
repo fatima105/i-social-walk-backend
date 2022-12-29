@@ -25,7 +25,9 @@ if (mysqli_query($conn, $sql)) {
     $sql1 = "Insert into friend_list(this_user_id,friend_user_id,date,status,noti_type_id) Values ('{$from_id}','{$to_id}','{$date}','requested','{$id}')";
 
     $query = mysqli_query($conn, $sql1);
-    echo json_encode(array('from_id' => $from_id, 'your_frnd_id' => $to_id, 'message' => 'friend request sent', 'error' => false));
+    if ($query) {
+        echo json_encode(array('from_id' => $from_id, 'your_frnd_id' => $to_id, 'message' => 'friend request sent', 'Notification id' => $id,  'error' => false));
+    }
 } else {
     echo json_encode(array('message' => 'Not Sent', 'error' => true));
 }
